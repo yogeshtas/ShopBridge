@@ -1,0 +1,124 @@
+<div class="row">
+    <div class="col-xl-12">
+        <div class="panel">
+            <div class="panel-hdr">	
+				<h2>
+                    ADD INVENTORY
+				</h2>
+			</div>
+            <div class="panel-container show">
+                <div class="panel-content p-0">	
+                    <form class="needs-validation" [formGroup]="formData" (ngSubmit)="onSubmit(formData.value)" novalidate>
+                        <div class="panel-content">
+                            <div class="form-row">
+                                <div class="col-md-4 mb-4">
+                                    <label class="form-label" for="validationName">Name<span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="validationName"  formControlName="name">
+                                    <div class="messages text-danger" *ngIf="(submitted || formData.controls.name.touched) && formData.controls.name.errors?.required">
+                                        Name is required.
+									</div>
+                                </div>
+                                <div class="col-md-4 col-lg-4 col-xl-4">
+                                    <label class="form-label" for="validationType">Description</label>
+                                    <input type="text" class="form-control" id="validationName"  formControlName="desc">
+                                </div>  
+
+                                <div class="col-md-4 col-lg-4 col-xl-4">
+                                    <label class="form-label">Price<span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" formControlName="price">
+                                    <div class="messages text-danger" *ngIf="(submitted || formData.controls.price.touched) && formData.controls.price.errors?.required">
+									  Price is required.
+									</div>
+
+                                    <div class="messages text-danger" *ngIf="formData.controls.price.dirty && formData.controls.price.errors?.pattern">
+                                        Enter correct price.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0 flex-row align-items-center">
+                            <button class="btn btn-primary ml-auto" type="submit" style="margin-right:5px;" [disabled]="!formData.valid">{{submitBtnTxt}}</button>
+                            <button class="btn btn-danger ml-auto" type="button" (click)="resetForm()">Clear</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xl-12">
+        <div class="panel">
+            <div class="panel-hdr">	
+				<h2>
+                    INVENTORY LIST
+				</h2>
+			</div>
+            <div class="panel-container show">
+                <div class="panel-content">
+                    <div class="table-responsive-lg">  
+                        <div class="row">                  
+                            <div class="col-md-12 col-lg-12 col-xl-12">
+                                <div>
+                                    <label>Search
+                                    <input type="search" [(ngModel)]="filterQuery" class="form-control input-sm full-data-search"
+                                        placeholder="Name">   
+                                    </label>                   
+                                </div>
+                            </div>
+                        </div>
+                        <table class="table table-bordered m-0 table table-striped" [mfData]="data | Filter:{name:filterQuery}:false"
+                         #mf="mfDataTable" [mfRowsOnPage]="rowsOnPage" [(mfSortBy)]="sortBy" [(mfSortOrder)]="sortOrder">
+                            <thead>
+                                <tr>                        
+                                    <th style="width: 5%">
+                                        <mfDefaultSorter>Sr. No</mfDefaultSorter>
+                                    </th>
+                                    <th>
+                                        <mfDefaultSorter by="name">Name</mfDefaultSorter>
+                                    </th>
+                                    <th>
+                                        <mfDefaultSorter by="description">Description</mfDefaultSorter>
+                                    </th>     
+                                    <th>
+                                        <mfDefaultSorter by="price">Price</mfDefaultSorter>
+                                    </th>                   
+                                    <th style="width: 15%">
+                                        <mfDefaultSorter>Action</mfDefaultSorter>
+                                    </th>
+                                </tr>
+                            </thead>  
+                            <div class="spinner-border text-primary" role="status" *ngIf="showLoader" style="margin-left: 0%; width: 100px; height:100px;
+                                align-self: center; position: absolute; left: 50%; right: 50%;">
+                            </div>                
+                            <tbody>
+                                <tr *ngFor="let item of mf.data;let i=index; let last=last">
+                                    <td>{{data.indexOf(item) + 1}}</td>
+                                    <td>{{item.name}}</td>
+                                    <td>{{item.description}}</td>
+                                    <td>{{item.price}}</td>
+                                    <td>
+                                        <div class="panel-toolbar">
+                                            <button id="editButton" class="btn btn-primary ml-auto" style="margin-right:1%;"
+                                                (click)="editRecord(item);"><i class="fal fa-edit"></i></button>
+                                            <button id="delButton" class="btn btn-danger ml-auto" (click)="deleteRecord(item.id, item.tag_name);"><i class="fal fa-trash"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="5">
+                                        <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25]"></mfBootstrapPaginator>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>	
+
